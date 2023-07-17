@@ -10,7 +10,7 @@ sample_info$cohort[grep('10-', colnames(peaks_by_samples))] <- "1"
 sample_info$cohort[grep('Cohort9', colnames(peaks_by_samples))] <- "9"
 
 getDDSObject <- function(peaks_by_samples_matrix, sample_info_df, mutant_genotype, cohort_names){
-  features_by_samples_mat <- peaks_by_samples[, which(sample_info_df$genotype %in% c("WT", mutant_genotype) & 
+  features_by_samples_mat <- peaks_by_samples_matrix[, which(sample_info_df$genotype %in% c("WT", mutant_genotype) & 
                                                         sample_info_df$cohort %in% cohort_names)]
   sample_info2 <- sample_info_df[which(sample_info_df$genotype %in% c("WT", mutant_genotype) & 
                                          sample_info_df$cohort %in% cohort_names), , drop = FALSE]
@@ -34,8 +34,8 @@ svseq <- svaseq(dat, mod, mod0)
 
 ddssva <- dds
 ddssva$SV1 <- svseq$sv[, 1]
-ddssva$SV2 <- svseq$sv[, 2]
-design(ddssva) <- formula(~ SV1 + SV2 + condition)
+#ddssva$SV2 <- svseq$sv[, 2]
+design(ddssva) <- formula(~ SV1 + condition)
 ddssva <- DESeq(ddssva)
 
 dds <- ddssva
@@ -144,7 +144,7 @@ lines(density(res2_granges$pvalue[unique(queryHits(findOverlaps(res2_granges,
                                                                 res_granges[-which(res_granges$pvalue <= quantile(res_granges$pvalue, 0.05))])))], from = 0, 
               to = 1, bw = 0.035), col = "cornflowerblue", lwd = 2.5)
 axis(1, at = c(0, 0.5, 1))
-axis(2, at = c(0, 5))
+axis(2, at = c(0, 6))
 legend <- legend("topright", legend = c("top disrupted KS1 peaks", 
                                         "other KS1 peaks"), col = c(alpha("red", 0.57), 
                                                                     "cornflowerblue"), lwd = 2.5, bty = 'n', cex = 0.75)
