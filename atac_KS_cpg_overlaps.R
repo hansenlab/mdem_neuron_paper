@@ -92,13 +92,13 @@ makeCGIvsAccessibilityPlot <- function(ranges, main_lab, color_to_use, y_limit){
 
 
 quartz(file = "atac_cpg_overlaps_KS1_neurons.pdf", height = 2.4, width = 2, pointsize = 8, type = "pdf")
-makeCGIvsAccessibilityPlot(res_proms, "KS1 - neurons", "orange", c(0.25, 0.95))
+makeCGIvsAccessibilityPlot(res_proms, "KS1 - neurons", "orange", c(0.15, 0.95))
 dev.off()
 quartz(file = "atac_cpg_overlaps_KS1_B.pdf", height = 2.4, width = 2, pointsize = 8, type = "pdf")
-makeCGIvsAccessibilityPlot(atac_B_KS1_granges_proms, "KS1 - B", alpha("black", 0.62), c(0.25, 0.95))
+makeCGIvsAccessibilityPlot(atac_B_KS1_granges_proms, "KS1 - B", alpha("black", 0.62), c(0.15, 0.95))
 dev.off()
 quartz(file = "atac_cpg_overlaps_KS1_T.pdf", height = 2.4, width = 2, pointsize = 8, type = "pdf")
-makeCGIvsAccessibilityPlot(atac_T_KS1_granges_proms, "KS1 - T", alpha("black", 0.62), c(0.25, 0.95))
+makeCGIvsAccessibilityPlot(atac_T_KS1_granges_proms, "KS1 - T", alpha("black", 0.62), c(0.15, 0.95))
 dev.off()
 quartz(file = "atac_cpg_overlaps_KS2_neurons.pdf", height = 2.4, width = 2, pointsize = 8, type = "pdf")
 makeCGIvsAccessibilityPlot(res2_proms, "KS2 - neurons", "orange", c(0.25, 0.95))
@@ -143,7 +143,7 @@ par(mfrow = c(1, 2))
 hist(top_ks1_cpg$log2FoldChange, breaks = 45, freq = FALSE, main = "KS1 - neurons", xlab = "log2FoldChange", 
      xaxt = 'n', yaxt = 'n', bty = 'l', col = "orange", font.main = 1, xlim = c(-0.75, 0.75), lty = 0)
 axis(1, at = c(-0.5, 0, 0.5))
-axis(2, at = c(0, 4, 8))
+axis(2, at = c(0, 3.5, 7))
 hist(top_ks2_cpg$log2FoldChange, breaks = 40, freq = FALSE, main = "KS2 - neurons", xlab = "log2FoldChange", 
      xaxt = 'n', yaxt = 'n', bty = 'l', col = "orange", font.main = 1, lty = 0)
 axis(1, at = c(-0.75, 0, 0.75))
@@ -213,7 +213,7 @@ lines(density(gene_level_results_neurons_KS1$pval[-which(toupper(gene_level_resu
                                         rownames(adjmatrix))], from = 0, 
               to = 1, bw = 0.035), col = "black", lwd = 2.5)
 axis(1, at = c(0, 0.5, 1))
-axis(2, at = c(0, 8))
+axis(2, at = c(0, 9))
 legend <- legend("topright", legend = c("highly co-expressed EM genes", 
                                         "non-co-expressed EM genes", 
                                         "other genes"), col = c(alpha("red", 0.57), "cornflowerblue", "black"),

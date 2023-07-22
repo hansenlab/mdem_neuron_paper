@@ -112,11 +112,11 @@ par(mfrow = c(1,2))
 plot(density(res_proms$pvalue[unique(queryHits(findOverlaps(res_proms, kmt2d_chip_granges)))], from = 0, to = 1, 
              bw = 0.035), 
      col = alpha("red", 0.57), lwd = 2.5, main = "KS1 (promoters)", bty = 'l', xlab = "p-value (neurons)", 
-     font.main = 1, yaxt = 'n', xaxt = 'n', ylim = c(0, 7))
+     font.main = 1, yaxt = 'n', xaxt = 'n', ylim = c(0, 8))
 lines(density(res_proms$pvalue[-unique(queryHits(findOverlaps(res_proms, kmt2d_chip_granges)))], from = 0, 
               to = 1, bw = 0.035), col = "cornflowerblue", lwd = 2.5)
 axis(1, at = c(0, 0.5, 1))
-axis(2, at = c(0, 7))
+axis(2, at = c(0, 8))
 legend <- legend("topright", legend = c("ATAC peaks overlapping\nKMT2D ChIP-seq peaks", 
                                         "other ATAC peaks"), col = c(alpha("red", 0.57), 
                                                                      "cornflowerblue"), lwd = 2.5, bty = 'n', cex = 0.75)
@@ -133,21 +133,36 @@ axis(2, at = c(0, 2.5))
 dev.off()
 
 
-quartz(file = "KS1_vs_KS2_neurons.pdf", height = 2.2, width = 2.2, pointsize = 8, type = "pdf")
-#par(mfrow = c(1,2))
-plot(density(res2_granges$pvalue[unique(queryHits(findOverlaps(res2_granges, 
-                                                               res_granges[which(res_granges$pvalue <= quantile(res_granges$pvalue, 0.05))])))], from = 0, to = 1, 
+quartz(file = "KS1_vs_KS2_neurons.pdf", height = 2.2, width = 4.4, pointsize = 8, type = "pdf")
+par(mfrow = c(1,2))
+plot(density(res2_proms$pvalue[unique(queryHits(findOverlaps(res2_proms, 
+                                                               res_granges[which(res_granges$qvalue < 0.05)])))], from = 0, to = 1, 
              bw = 0.035), 
      col = alpha("red", 0.57), lwd = 2.5, main = "neurons", bty = 'l', xlab = "p-value (KS2)", 
      font.main = 1, yaxt = 'n', xaxt = 'n')
-lines(density(res2_granges$pvalue[unique(queryHits(findOverlaps(res2_granges, 
-                                                                res_granges[-which(res_granges$pvalue <= quantile(res_granges$pvalue, 0.05))])))], from = 0, 
+lines(density(res2_proms$pvalue[unique(queryHits(findOverlaps(res2_proms, 
+                                                                res_granges[-which(res_granges$qvalue < 0.05)])))], from = 0, 
               to = 1, bw = 0.035), col = "cornflowerblue", lwd = 2.5)
 axis(1, at = c(0, 0.5, 1))
-axis(2, at = c(0, 6))
+axis(2, at = c(0, 7.5))
 legend <- legend("topright", legend = c("top disrupted KS1 peaks", 
                                         "other KS1 peaks"), col = c(alpha("red", 0.57), 
                                                                     "cornflowerblue"), lwd = 2.5, bty = 'n', cex = 0.75)
+
+plot(density(res2_non_proms$pvalue[unique(queryHits(findOverlaps(res2_non_proms, 
+                                                             res_granges[which(res_granges$qvalue < 0.1)])))], from = 0, to = 1, 
+             bw = 0.035), 
+     col = alpha("red", 0.57), lwd = 2.5, main = "neurons", bty = 'l', xlab = "p-value (KS2)", 
+     font.main = 1, yaxt = 'n', xaxt = 'n')
+lines(density(res2_non_proms$pvalue[unique(queryHits(findOverlaps(res2_non_proms, 
+                                                              res_granges[-which(res_granges$qvalue < 0.1)])))], from = 0, 
+              to = 1, bw = 0.035), col = "cornflowerblue", lwd = 2.5)
+axis(1, at = c(0, 0.5, 1))
+axis(2, at = c(0, 3.5))
+legend <- legend("topright", legend = c("top disrupted KS1 peaks", 
+                                        "other KS1 peaks"), col = c(alpha("red", 0.57), 
+                                                                    "cornflowerblue"), lwd = 2.5, bty = 'n', cex = 0.75)
+
 dev.off()
 
 

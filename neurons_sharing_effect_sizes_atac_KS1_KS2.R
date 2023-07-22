@@ -1,47 +1,44 @@
 ###effect sign concordance between neurons, B and T cells
-KS1_B_vs_neurons <- getEffectSizeConcordance(res_granges, atac_B_KS1_granges[which(atac_B_KS1_granges$padj < 0.1)])
-KS1_B_vs_T <- getEffectSizeConcordance(atac_T_KS1_granges, atac_B_KS1_granges[which(atac_B_KS1_granges$padj < 0.1)])
-KS1_B_vs_neurons_proms <- getEffectSizeConcordance(res_proms, atac_B_KS1_granges_proms[which(atac_B_KS1_granges_proms$padj < 0.1)])
-KS1_B_vs_T_proms <- getEffectSizeConcordance(atac_T_KS1_granges_proms, atac_B_KS1_granges_proms[which(atac_B_KS1_granges_proms$padj < 0.1)])
+KS1_B_vs_neurons <- getEffectSizeConcordance(res_granges, atac_B_KS1_granges[which(atac_B_KS1_granges$qvalue <= 0.1)])
+KS1_B_vs_T <- getEffectSizeConcordance(atac_T_KS1_granges, atac_B_KS1_granges[which(atac_B_KS1_granges$qvalue <= 0.1)])
+KS1_B_vs_neurons_proms <- getEffectSizeConcordance(res_proms, atac_B_KS1_granges_proms[which(atac_B_KS1_granges_proms$qvalue <= 0.1)])
+KS1_B_vs_T_proms <- getEffectSizeConcordance(atac_T_KS1_granges_proms, atac_B_KS1_granges_proms[which(atac_B_KS1_granges_proms$qvalue <= 0.1)])
 
 
 #KS2
-KS2_B_vs_neurons <- getEffectSizeConcordance(res2_granges, atac_B_KS2_granges[which(atac_B_KS2_granges$pvalue <= 
-                                                                           quantile(atac_B_KS2_granges$pvalue, 0.01))])
-KS2_B_vs_T <- getEffectSizeConcordance(atac_T_KS2_granges, atac_B_KS2_granges[which(atac_B_KS2_granges$pvalue <= 
-                                                                           quantile(atac_B_KS2_granges$pvalue, 0.01))])
+KS2_B_vs_neurons <- getEffectSizeConcordance(res2_granges, atac_B_KS2_granges[which(atac_B_KS2_granges$qvalue <= 0.1)])
+KS2_B_vs_T <- getEffectSizeConcordance(atac_T_KS2_granges, atac_B_KS2_granges[which(atac_B_KS2_granges$qvalue <= 0.1)])
 KS2_B_vs_neurons_proms <- getEffectSizeConcordance(res2_proms, 
-                                        atac_B_KS2_granges_proms[which(atac_B_KS2_granges_proms$pvalue <= 
-                                                                         quantile(atac_B_KS2_granges_proms$pvalue, 0.05))])
+                                        atac_B_KS2_granges_proms[which(atac_B_KS2_granges_proms$qvalue <= 0.1)])
 KS2_B_vs_T_proms <- getEffectSizeConcordance(atac_T_KS2_granges_proms, 
-                                  atac_B_KS2_granges_proms[which(atac_B_KS2_granges_proms$pvalue <= 
-                                                                   quantile(atac_B_KS2_granges_proms$pvalue, 0.05))])
+                                  atac_B_KS2_granges_proms[which(atac_B_KS2_granges_proms$qvalue <= 0.1)])
 
 ####
 #####null distributions based on sampling random locations with same balance of positive/negative logFC
 #KS1
 permutation_dist_KS1_B_vs_neurons <- replicate(1000, getRandomEffectSizeConcordance(res_granges, atac_B_KS1_granges, 
-                                                                 atac_B_KS1_granges$padj, 0.1))
+                                                                                    atac_B_KS1_granges$qvalue, 0.1))
 permutation_dist_KS1_B_vs_T <- replicate(1000, getRandomEffectSizeConcordance(atac_T_KS1_granges, atac_B_KS1_granges, 
-                                                           atac_B_KS1_granges$padj, 0.1))
+                                                                              atac_B_KS1_granges$qvalue, 0.1))
 permutation_dist_KS1_B_vs_neurons_proms <- replicate(1000, getRandomEffectSizeConcordance(res_proms, atac_B_KS1_granges_proms, 
-                                                                       atac_B_KS1_granges_proms$padj, 0.1))
+                                                                                          atac_B_KS1_granges_proms$qvalue, 0.1))
 permutation_dist_KS1_B_vs_T_proms <- replicate(1000, getRandomEffectSizeConcordance(atac_T_KS1_granges_proms, atac_B_KS1_granges_proms, 
-                                                                 atac_B_KS1_granges_proms$padj, 0.1))
+                                                                                    atac_B_KS1_granges_proms$qvalue, 0.1))
 
 #KS2
 permutation_dist_KS2_B_vs_neurons <- replicate(1000, getRandomEffectSizeConcordance(res2_granges, atac_B_KS2_granges, 
-                                                                 atac_B_KS2_granges$pvalue, 
-                                                                 quantile(atac_B_KS2_granges$pvalue, 0.01)))
+                                                                                    atac_B_KS2_granges$qvalue, 0.1))
 permutation_dist_KS2_B_vs_T <- replicate(1000, getRandomEffectSizeConcordance(atac_T_KS2_granges, atac_B_KS2_granges, 
-                                                           atac_B_KS2_granges$pvalue, 
-                                                           quantile(atac_B_KS2_granges$pvalue, 0.01)))
+                                                                              atac_B_KS2_granges$qvalue, 0.1))
 permutation_dist_KS2_B_vs_neurons_proms <- replicate(1000, getRandomEffectSizeConcordance(res2_proms, atac_B_KS2_granges_proms, 
-                                                                       atac_B_KS2_granges_proms$pvalue, 
-                                                                       quantile(atac_B_KS2_granges_proms$pvalue, 0.05)))
+                                                                       atac_B_KS2_granges_proms$qvalue, 0.1))
 permutation_dist_KS2_B_vs_T_proms <- replicate(1000, getRandomEffectSizeConcordance(atac_T_KS2_granges_proms, atac_B_KS2_granges_proms, 
-                                                                 atac_B_KS2_granges_proms$pvalue, 
-                                                                 quantile(atac_B_KS2_granges_proms$pvalue, 0.05)))
+                                                                 atac_B_KS2_granges_proms$qvalue, 0.1))
+
+save(permutation_dist_KS1_B_vs_neurons_proms, permutation_dist_KS1_B_vs_T_proms, 
+     permutation_dist_KS2_B_vs_neurons_proms, permutation_dist_KS2_B_vs_T_proms, 
+     permutation_dist_KS1_B_vs_neurons, permutation_dist_KS1_B_vs_T, 
+     permutation_dist_KS2_B_vs_neurons, permutation_dist_KS2_B_vs_T, file = "neuron_permutation_distributions_effect_size_july2023.rda")
 
 
 ###figures
@@ -139,7 +136,7 @@ dev.off()
 quartz(file = "neuron_B_T_overlaps_effect_sizes.pdf", height = 2.2, width = 3.6, pointsize = 8, type = "pdf")
 par(mar = c(4, 5, 1, 1) + 0.1)
 plot(1, KS1_B_vs_neurons_proms/mean(permutation_dist_KS1_B_vs_neurons_proms), cex = 1.25, col = "orange", pch = 19,
-     bty = 'l', main = "", xlab = "", ylab = "% regions w/ accessibility disruption in\nsame direction w/ B cells over null expectation", xlim = c(0.8, 8.2), 
+     bty = 'l', main = "", xlab = "", ylab = "concordance in direction of\naccessibility disruption w/ B cells", xlim = c(0.8, 8.2), 
      ylim = c(0.9, 2), xaxt = 'n', yaxt = 'n', cex.lab = 0.75)
 points(2, KS1_B_vs_T_proms/mean(permutation_dist_KS1_B_vs_T_proms), cex = 1.25, col = alpha("black", 0.62), pch = 19)
 points(3, KS2_B_vs_neurons_proms/mean(permutation_dist_KS2_B_vs_neurons_proms), cex = 1.25, col = "orange", pch = 19)
@@ -162,15 +159,15 @@ dev.off()
 ###effect size comparisons:
 quartz(file = "KS1_KS2_magnitude_effect_sizes.pdf", height = 2.2, width = 4.4, pointsize = 8, type = "pdf")
 par(mfrow = c(1,2))
-indices_top <- which(res_granges$pvalue < quantile(res_granges$pvalue, 0.05))
+indices_top <- which(res_granges$qvalue < 0.1)
 indices_overlap <- unique(queryHits(findOverlaps(res_granges, 
-                                                 atac_B_KS1_granges[which(atac_B_KS1_granges$padj < 0.1)])))
-plot(density(-res_granges$log2FoldChange[indices_overlap]), 
-     col = "deep pink", lwd = 2.5, main = "genome-wide", bty = 'l', 
+                                                 atac_B_KS1_granges[which(atac_B_KS1_granges$qvalue < 0.1)])))
+plot(density(-res_granges$log2FoldChange[indices_top]), 
+     col = "orange", lwd = 2.5, main = "genome-wide", bty = 'l', 
      xlab = "log2(fold change) in KS1 neurons", 
-     font.main = 1, yaxt = 'n', xaxt = 'n', xlim = c(-0.93, 0.93), ylim = c(0, 4))
-lines(density(-res_granges$log2FoldChange[indices_top]), 
-      col = "orange", lwd = 2.5)
+     font.main = 1, yaxt = 'n', xaxt = 'n', xlim = c(-0.93, 0.93))
+lines(density(-res_granges$log2FoldChange[indices_overlap]), 
+      col = "deep pink", lwd = 2.5)
 lines(density(-res_granges$log2FoldChange[-unique(c(indices_top, indices_overlap))]), col = "cornflowerblue", 
       lwd = 2.5)
 axis(1, at = c(-0.4, 0, 0.4))
@@ -185,10 +182,9 @@ legend <- legend("topleft", legend = c("top significant\nneuronal peaks",
 
 
 
-indices_top <- which(res2_granges$pvalue < quantile(res2_granges$pvalue, 0.05))
+indices_top <- which(res2_granges$qvalue < 0.1)
 indices_overlap <- unique(queryHits(findOverlaps(res2_granges, 
-                                                 atac_B_KS2_granges[which(atac_B_KS2_granges$pvalue <= 
-                                                                        quantile(atac_B_KS2_granges$pvalue, 0.01))])))
+                                    atac_B_KS2_granges[which(atac_B_KS2_granges$qvalue < 0.1)])))
 plot(density(-res2_granges$log2FoldChange[indices_overlap]), 
      col = "deep pink", lwd = 2.5, main = "genome-wide", bty = 'l', 
      xlab = "log2(fold change) in KS2 neurons", 
