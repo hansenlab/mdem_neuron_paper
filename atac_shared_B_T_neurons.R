@@ -1,10 +1,10 @@
 ###find peaks disrupted in all three cell types
 #KS1
 qobj_KS1_neurons_B <- qvalue(p = res_granges$pvalue[unique(queryHits(findOverlaps(res_granges, 
-                                                                                  atac_B_KS1_granges[which(atac_B_KS1_granges$padj < 0.1)])))], 
+                                                                                  atac_B_KS1_granges[which(atac_B_KS1_granges$qvalue < 0.1)])))], 
                              fdr.level = 0.1, pi0.method = "bootstrap")
 KS1_neurons_B <- res_granges[unique(queryHits(findOverlaps(res_granges, 
-                                                           atac_B_KS1_granges[which(atac_B_KS1_granges$padj < 0.1)])))][
+                                                           atac_B_KS1_granges[which(atac_B_KS1_granges$qvalue < 0.1)])))][
                                                              which(qobj_KS1_neurons_B$significant == TRUE)]
 
 
@@ -19,7 +19,8 @@ KS1_neurons_B_T <- atac_T_KS1_granges[unique(queryHits(findOverlaps(atac_T_KS1_g
                                                                     KS1_neurons_B)))][which(qobj_KS1_neurons_B_T$significant == TRUE)]
 
 
-shared_genes <- unique(unlist(KS1_neurons_B_T$prom_overlapping_id[-which(is.na(KS1_neurons_B_T$prom_overlapping_id))]))
+shared_genes_df <- getGeneLevelResults(KS1_neurons_B_T)
+shared_genes_df <- shared_genes_df[, 1:2] #keeps only gene ids and gene name
 all_genes <- unique(Reduce(intersect, list(gene_level_results_neurons_KS1$gene_ids, 
                                                   gene_level_results_B_KS1$gene_ids, 
                                                   gene_level_results_T_KS1$gene_ids)))
@@ -47,12 +48,14 @@ qobj_KS2_neurons_B_T <- qvalue(p = atac_T_KS2_granges$pvalue[unique(queryHits(fi
 KS2_neurons_B_T <- atac_T_KS2_granges[unique(queryHits(findOverlaps(atac_T_KS2_granges, 
                                KS2_neurons_B)))][which(qobj_KS2_neurons_B_T$significant == TRUE)]
 
-shared_genes2 <- unique(unlist(KS2_neurons_B_T$prom_overlapping_id[-which(is.na(KS2_neurons_B_T$prom_overlapping_id))]))
+shared_genes2_df <- getGeneLevelResults(KS2_neurons_B_T)
+shared_genes2_df <- shared_genes2_df[, 1:2] #keeps only gene ids and gene name
 all_genes2 <- unique(Reduce(intersect, list(gene_level_results_neurons_KS2$gene_ids, 
                                                   gene_level_results_B_KS2$gene_ids, 
                                                   gene_level_results_T_KS2$gene_ids)))
 
-
+shared_genes <- shared_genes_df$gene_ids
+shared_genes2 <- shared_genes2_df$gene_ids
 n11 <- length(intersect(shared_genes, shared_genes2))
 n12 <- length(shared_genes[-which(shared_genes %in% shared_genes2)])
 n21 <- length(shared_genes2[-which(shared_genes2 %in% shared_genes)])
@@ -110,13 +113,13 @@ hist(atac_T_KS1_granges$pvalue[unique(queryHits(findOverlaps(atac_T_KS1_granges,
 axis(2, at = c(0, 9, 18))
 axis(1, at = c(0, 0.5, 1))
 abline(h = 18)
-hist(atac_T_KS1_granges$pvalue[unique(queryHits(findOverlaps(atac_T_KS1_granges, unique_B[which(unique_B$padj < 0.1)])))], 
+hist(atac_T_KS1_granges$pvalue[unique(queryHits(findOverlaps(atac_T_KS1_granges, unique_B[which(unique_B$qvalue < 0.1)])))], 
      freq = FALSE, breaks = 40, ylim = c(0, 18), 
      col = alpha("cornflowerblue", 0.75), main = "regions disrupted in B only", xlab = "KS1 T cell p-values", xaxt = 'n', yaxt = 'n', font.main = 1)
 axis(2, at = c(0, 9, 18))
 axis(1, at = c(0, 0.5, 1))
 abline(h = 18)
-hist(atac_T_KS1_granges$pvalue[unique(queryHits(findOverlaps(atac_T_KS1_granges, unique_B[-which(unique_B$padj < 0.1)])))], 
+hist(atac_T_KS1_granges$pvalue[unique(queryHits(findOverlaps(atac_T_KS1_granges, unique_B[-which(unique_B$qvalue < 0.1)])))], 
      freq = FALSE, breaks = 40, ylim = c(0, 18), 
      col = alpha("forest green", 0.75), main = "regions disrupted in neither B nor neurons", xlab = "KS1 T cell p-values", xaxt = 'n', yaxt = 'n', font.main = 1)
 axis(2, at = c(0, 9, 18))

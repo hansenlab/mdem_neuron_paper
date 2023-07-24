@@ -95,13 +95,15 @@ res2_non_proms <- res2_granges[-queryHits(prom_overlaps2)]
 ###supp tables
 res_granges$qvalue <- qvalue(res_granges$pvalue, fdr.level = 0.1)$qvalues
 res2_granges$qvalue <- qvalue(res2_granges$pvalue, fdr.level = 0.1)$qvalues
+
 res_df <- annoGR2DF(res_granges)
 res2_df <- annoGR2DF(res2_granges)
 res_df <- res_df[which(res_df$qvalue <= 0.1), ]
 res2_df <- res_df[which(res2_df$qvalue <= 0.1), ]
+res_df$log2FoldChange <- -res_df$log2FoldChange
+res2_df$log2FoldChange <- -res2_df$log2FoldChange
 write_csv(res_df[order(res_df$qvalue), ], "KS1_neurons_atac_most_significant.csv")
 write_csv(res2_df[order(res2_df$qvalue), ], "KS2_neurons_atac_most_significant.csv")
-
 
 
 ##############
@@ -136,12 +138,12 @@ dev.off()
 quartz(file = "KS1_vs_KS2_neurons.pdf", height = 2.2, width = 4.4, pointsize = 8, type = "pdf")
 par(mfrow = c(1,2))
 plot(density(res2_proms$pvalue[unique(queryHits(findOverlaps(res2_proms, 
-                                                               res_granges[which(res_granges$qvalue < 0.05)])))], from = 0, to = 1, 
+                                                               res_granges[which(res_granges$qvalue < 0.1)])))], from = 0, to = 1, 
              bw = 0.035), 
      col = alpha("red", 0.57), lwd = 2.5, main = "neurons", bty = 'l', xlab = "p-value (KS2)", 
      font.main = 1, yaxt = 'n', xaxt = 'n')
 lines(density(res2_proms$pvalue[unique(queryHits(findOverlaps(res2_proms, 
-                                                                res_granges[-which(res_granges$qvalue < 0.05)])))], from = 0, 
+                                                                res_granges[-which(res_granges$qvalue < 0.1)])))], from = 0, 
               to = 1, bw = 0.035), col = "cornflowerblue", lwd = 2.5)
 axis(1, at = c(0, 0.5, 1))
 axis(2, at = c(0, 7.5))
