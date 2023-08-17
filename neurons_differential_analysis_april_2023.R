@@ -102,8 +102,13 @@ res_df <- res_df[which(res_df$qvalue <= 0.1), ]
 res2_df <- res_df[which(res2_df$qvalue <= 0.1), ]
 res_df$log2FoldChange <- -res_df$log2FoldChange
 res2_df$log2FoldChange <- -res2_df$log2FoldChange
-write_csv(res_df[order(res_df$qvalue), ], "KS1_neurons_atac_most_significant.csv")
-write_csv(res2_df[order(res2_df$qvalue), ], "KS2_neurons_atac_most_significant.csv")
+write_csv(res_df[order(res_df$qvalue), 
+                 c("chr", "start", "end", "width", "baseMean", "log2FoldChange", "lfcSE", "pvalue", "qvalue")], 
+          "KS1_neurons_atac_most_significant.csv")
+write_csv(res2_df[order(res2_df$qvalue), 
+                  c("chr", "start", "end", "width", "baseMean", "log2FoldChange", "lfcSE", "pvalue", "qvalue")],
+          "KS2_neurons_atac_most_significant.csv")
+
 
 
 ##############
@@ -155,7 +160,7 @@ plot(density(res2_non_proms$pvalue[unique(queryHits(findOverlaps(res2_non_proms,
                                                              res_granges[which(res_granges$qvalue < 0.1)])))], from = 0, to = 1, 
              bw = 0.035), 
      col = alpha("red", 0.57), lwd = 2.5, main = "neurons", bty = 'l', xlab = "p-value (KS2)", 
-     font.main = 1, yaxt = 'n', xaxt = 'n')
+     font.main = 1, yaxt = 'n', xaxt = 'n', ylim = c(0, 3.62))
 lines(density(res2_non_proms$pvalue[unique(queryHits(findOverlaps(res2_non_proms, 
                                                               res_granges[-which(res_granges$qvalue < 0.1)])))], from = 0, 
               to = 1, bw = 0.035), col = "cornflowerblue", lwd = 2.5)
@@ -168,7 +173,17 @@ legend <- legend("topright", legend = c("top disrupted KS1 peaks",
 dev.off()
 
 
-
+###KS1 overlap with chip calculation
+diff <- which(res_proms$pvalue <= quantile(res_proms$pvalue, 0.1))
+non_diff <- which(res_proms$pvalue >= quantile(res_proms$pvalue, 0.9))
+kmt2d_bound <- unique(queryHits(findOverlaps(res_proms, kmt2d_chip_granges)))
+all <- 1:length(res_proms)
+kmt2d_non_bound <- all[-unique(queryHits(findOverlaps(res_proms, kmt2d_chip_granges)))]
+n11 <- length(intersect(diff, kmt2d_bound))
+n12 <- length(intersect(diff, kmt2d_non_bound))
+n21 <- length(intersect(non_diff, kmt2d_bound))
+n22 <- length(intersect(non_diff, kmt2d_non_bound))
+fisher.test(matrix(c(n11, n12, n21, n22), nrow = 2))
 
 
 
