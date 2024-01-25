@@ -9,7 +9,8 @@ getGeneLevelResults <- function(genome_wide_ranges){
   gene_level_df <- data.frame(gene_ids = names(gene_level), 
                               gene_names = sapply(gene_level, function(xx) unique(xx$gene_name)),
                               pval = sapply(gene_level, function(xx) min(xx$pvalue)), 
-                              padj = sapply(gene_level, function(xx) min(xx$padj)))
+                              padj = sapply(gene_level, function(xx) min(xx$padj)),
+                              logFC = sapply(gene_level, function(xx) xx$log2FoldChange[which.min(xx$pvalue)]))
   gene_level_df
 }
 

@@ -93,7 +93,7 @@ par(mfrow = c(1,2))
 permutation_dist <- permutation_dist_KS2_B_vs_neurons
 plot(density(permutation_dist), 
      col = alpha("cornflowerblue"), lwd = 2.5, main = "KS2 B vs neurons (genome-wide)", bty = 'l', xlab = "% regions w/ accessibility\ndisruption in same direction", 
-     font.main = 1, yaxt = 'n', xaxt = 'n', xlim = c(0.42, 1))
+     font.main = 1, yaxt = 'n', xaxt = 'n', xlim = c(0.37, 1))
 abline(v = KS2_B_vs_neurons, lwd = 2.5, col = alpha("red", 0.57))
 axis(1, at = c(0.5, 0.75, 1))
 axis(2, at = c(0, round(max(density(permutation_dist)$y))))
@@ -101,7 +101,7 @@ axis(2, at = c(0, round(max(density(permutation_dist)$y))))
 permutation_dist <- permutation_dist_KS2_B_vs_T
 plot(density(permutation_dist), 
      col = alpha("cornflowerblue"), lwd = 2.5, main = "KS2 B vs T (genome-wide)", bty = 'l', xlab = "% regions w/ accessibility\ndisruption in same direction", 
-     font.main = 1, yaxt = 'n', xaxt = 'n', xlim = c(0.42, 1))
+     font.main = 1, yaxt = 'n', xaxt = 'n', xlim = c(0.4, 1))
 abline(v = KS2_B_vs_T, lwd = 2.5, col = alpha("red", 0.57))
 axis(1, at = c(0.5, 0.75, 1))
 axis(2, at = c(0, round(max(density(permutation_dist)$y))))
@@ -162,14 +162,14 @@ par(mfrow = c(1,2))
 indices_top <- which(res_granges$qvalue < 0.1)
 indices_overlap <- unique(queryHits(findOverlaps(res_granges, 
                                                  atac_B_KS1_granges[which(atac_B_KS1_granges$qvalue < 0.1)])))
-plot(density(-res_granges$log2FoldChange[indices_top]), 
+plot(density(-res_granges$log2FoldChange[indices_top], from = -1, to = 1), 
      col = "orange", lwd = 2.5, main = "genome-wide", bty = 'l', 
      xlab = "log2(fold change) in KS1 neurons", 
      font.main = 1, yaxt = 'n', xaxt = 'n', xlim = c(-0.93, 0.93))
-lines(density(-res_granges$log2FoldChange[indices_overlap]), 
+lines(density(-res_granges$log2FoldChange[indices_overlap], from = -1, to = 1), 
       col = "deep pink", lwd = 2.5)
-lines(density(-res_granges$log2FoldChange[-unique(c(indices_top, indices_overlap))]), col = "cornflowerblue", 
-      lwd = 2.5)
+lines(density(-res_granges$log2FoldChange[-unique(c(indices_top, indices_overlap))], from = -1, to = 1), 
+      col = "cornflowerblue", lwd = 2.5)
 axis(1, at = c(-0.4, 0, 0.4))
 axis(2, at = c(0, round(max(density(-res_granges$log2FoldChange[indices_top])$y, 
                             density(-res_granges$log2FoldChange[indices_overlap])$y, 
@@ -185,14 +185,14 @@ legend <- legend("topleft", legend = c("top significant\nneuronal peaks",
 indices_top <- which(res2_granges$qvalue < 0.1)
 indices_overlap <- unique(queryHits(findOverlaps(res2_granges, 
                                     atac_B_KS2_granges[which(atac_B_KS2_granges$qvalue < 0.1)])))
-plot(density(-res2_granges$log2FoldChange[indices_overlap]), 
+plot(density(-res2_granges$log2FoldChange[indices_overlap], from = -1.5, to = 1.5), 
      col = "deep pink", lwd = 2.5, main = "genome-wide", bty = 'l', 
      xlab = "log2(fold change) in KS2 neurons", 
      font.main = 1, yaxt = 'n', xaxt = 'n', xlim = c(-1.4, 1.4), ylim = c(0, 2))
-lines(density(-res2_granges$log2FoldChange[indices_top]), 
+lines(density(-res2_granges$log2FoldChange[indices_top], from = -1.5, to = 1.5), 
       col = "orange", lwd = 2.5)
-lines(density(-res2_granges$log2FoldChange[-unique(c(indices_top, indices_overlap))]), col = "cornflowerblue", 
-      lwd = 2.5)
+lines(density(-res2_granges$log2FoldChange[-unique(c(indices_top, indices_overlap))], from = -1.5, to = 1.5), 
+      col = "cornflowerblue", lwd = 2.5)
 axis(1, at = c(-0.5, 0, 0.5))
 axis(2, at = c(0, round(max(density(-res2_granges$log2FoldChange[indices_top])$y, 
                             density(-res2_granges$log2FoldChange[indices_overlap])$y, 
@@ -202,7 +202,7 @@ dev.off()
 
 
 
-#indices_top <- which(atac_T_KS1_granges$pvalue < quantile(atac_T_KS1_granges$pvalue, 0.05))
+#indices_top <- which(atac_T_KS1_granges$qvalue < 0.1)
 #indices_overlap <- unique(queryHits(findOverlaps(atac_T_KS1_granges, 
 #                                                 atac_B_KS1_granges[which(atac_B_KS1_granges$padj < 0.1)])))
 #plot(density(-atac_T_KS1_granges$log2FoldChange[indices_overlap]), 

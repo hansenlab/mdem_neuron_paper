@@ -3,9 +3,9 @@ getOverlapPi0 <- function(ranges1, ranges2){ #ranges 1 must have a column named 
              pi0.method = "bootstrap")$pi0
 }
 
-getOverlapPi02 <- function(ranges1, ranges2){ #ranges 1 must have a column named "pvalue"
+getOverlapPi02 <- function(ranges1, ranges2, lambda_value){ #ranges 1 must have a column named "pvalue"
   1 - pi0est(p = ranges1$pvalue[unique(queryHits(findOverlaps(ranges1, ranges2)))], 
-             lambda = 0.5)$pi0
+             lambda = lambda_value)$pi0
 }
 
 getOverlapNullDistribution1 <- function(ranges1, ranges2){ #ranges 1 must have a column named "pvalue"
@@ -30,13 +30,13 @@ getOverlapNullDistribution2 <- function(ranges1, ranges2, pval_vector, threshold
   })
 }
 
-getOverlapNullDistribution3 <- function(ranges1, ranges2, pval_vector, threshold){ #ranges 1 must have a column named "pvalue"
+getOverlapNullDistribution3 <- function(ranges1, ranges2, pval_vector, threshold, lambda_value){ #ranges 1 must have a column named "pvalue"
   #pval_vector can be either adjusted or unadjusted pvals
   replicate(10000, {
     pi0_random <- pi0est(p = sample(ranges1$pvalue[unique(queryHits(findOverlaps(ranges1, ranges2)))], 
                                     length(unique(queryHits(findOverlaps(ranges1, 
                                                                          ranges2[which(pval_vector < threshold)]))))), 
-                         lambda = 0.5)$pi0
+                         lambda = lambda_value)$pi0
     1- pi0_random
     #length(which(qobj_random$significant == TRUE))
   })

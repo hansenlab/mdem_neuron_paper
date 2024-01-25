@@ -12,15 +12,15 @@ KS1_B_vs_T_proms <- getOverlapPi0(atac_T_KS1_granges_proms, atac_B_KS1_granges_p
 
 #KS2
 KS2_B_vs_neurons <- getOverlapPi02(res2_granges, atac_B_KS2_granges[which(atac_B_KS2_granges$qvalue <= 
-                                                                   0.1)])
+                                                                   0.1)], lambda_value = 0.5)
 KS2_B_vs_T <- getOverlapPi02(atac_T_KS2_granges, atac_B_KS2_granges[which(atac_B_KS2_granges$qvalue <= 
-                                                             0.1)])
+                                                             0.1)], lambda_value = 0.5)
 KS2_B_vs_neurons_proms <- getOverlapPi02(res2_proms, 
                                         atac_B_KS2_granges_proms[which(atac_B_KS2_granges_proms$qvalue <= 
-                                                             0.1)])
+                                                             0.1)], lambda_value = 0.5)
 KS2_B_vs_T_proms <- getOverlapPi02(atac_T_KS2_granges_proms, 
                                   atac_B_KS2_granges_proms[which(atac_B_KS2_granges_proms$qvalue <= 
-                                                                   0.1)])
+                                                                   0.1)], lambda_value = 0.5)
 
 #####null distributions based on sampling location sets of same size
 #KS1
@@ -40,16 +40,20 @@ permutation_dist_KS1_B_vs_T_proms <- getOverlapNullDistribution2(atac_T_KS1_gran
 #KS2
 permutation_dist_KS2_B_vs_neurons <- getOverlapNullDistribution3(res2_granges, atac_B_KS2_granges, 
                                                            atac_B_KS2_granges$qvalue, 
-                                                           0.1)
+                                                           0.1, 
+                                                           lambda_value = 0.5)
 permutation_dist_KS2_B_vs_T <- getOverlapNullDistribution3(atac_T_KS2_granges, atac_B_KS2_granges, 
                                                            atac_B_KS2_granges$qvalue, 
-                                                           0.1)
+                                                           0.1, 
+                                                           lambda_value = 0.5)
 permutation_dist_KS2_B_vs_neurons_proms <- getOverlapNullDistribution3(res2_proms, atac_B_KS2_granges_proms, 
                                                            atac_B_KS2_granges_proms$qvalue, 
-                                                           0.1)
+                                                           0.1, 
+                                                           lambda_value = 0.5)
 permutation_dist_KS2_B_vs_T_proms <- getOverlapNullDistribution3(atac_T_KS2_granges_proms, atac_B_KS2_granges_proms, 
                                                            atac_B_KS2_granges_proms$qvalue, 
-                                                           0.1)
+                                                           0.1, 
+                                                           lambda_value = 0.5)
 
 save(permutation_dist_KS1_B_vs_neurons_proms, permutation_dist_KS1_B_vs_T_proms, 
      permutation_dist_KS2_B_vs_neurons_proms, permutation_dist_KS2_B_vs_T_proms, 
@@ -322,13 +326,35 @@ dev.off()
 
 
 
+####neurons vs T
+KS1_T_vs_neurons <- getOverlapPi0(atac_T_KS1_granges, res_granges[which(res_granges$qvalue <= 
+                                                                          0.1)])
+
+KS1_T_vs_neurons_proms <- getOverlapPi0(atac_T_KS1_granges_proms, res_proms[which(res_proms$qvalue <= 
+                                                                                    0.1)])
+
+KS2_T_vs_neurons <- getOverlapPi0(atac_T_KS2_granges, res2_granges[which(res2_granges$qvalue <= 
+                                                                           0.1)])
+KS2_T_vs_neurons_proms <- getOverlapPi0(atac_T_KS2_granges_proms, 
+                                        res2_proms[which(res2_proms$qvalue <= 0.1)])
+
+#
+permutation_dist_KS1_T_vs_neurons <- getOverlapNullDistribution2(atac_T_KS1_granges, res_granges, 
+                                                                 res_granges$qvalue, 
+                                                                 0.1)
+
+permutation_dist_KS1_T_vs_neurons_proms <- getOverlapNullDistribution2(atac_T_KS1_granges_proms, res_proms, 
+                                                                       res_proms$qvalue, 
+                                                                       0.1)
 
 
+permutation_dist_KS2_T_vs_neurons <- getOverlapNullDistribution2(atac_T_KS2_granges, res2_granges, 
+                                                                 res2_granges$qvalue, 
+                                                                 0.1)
 
-
-
-
-
+permutation_dist_KS2_T_vs_neurons_proms <- getOverlapNullDistribution2(atac_T_KS2_granges_proms, res2_proms, 
+                                                                       res2_proms$qvalue, 
+                                                                       0.1)
 
 
 
