@@ -26,3 +26,24 @@ geo_mat_T_df <- as.data.frame(geo_mat_T)
 geo_mat_T_df <- rownames_to_column(geo_mat_T_df, "mm10_coordinates")
 write_csv(geo_mat_T_df, "GEO/neurons_paper_2023/atac_peaks_by_samples_matrix_T.csv")
 
+
+###neurons (KS1 replication samples)
+mat <- peaks_by_samples[, -which(colnames(peaks_by_samples) == "Cohort8-12_KS1")]
+sampinf <- sample_info[-which(colnames(peaks_by_samples) == "Cohort8-12_KS1"), ]
+mat3 <- mat[, which(sampinf$genotype %in% c("KS1") & 
+                      sampinf$cohort %in% c("8"))]
+geo_mat_neurons_replication <- mat3
+geo_mat_neurons_replication_df <- as.data.frame(geo_mat_neurons_replication)
+library(tibble)
+geo_mat_neurons_replication_df <- rownames_to_column(geo_mat_neurons_replication_df, "mm10_coordinates")
+write_csv(geo_mat_neurons_replication_df, "GEO/neurons_paper_2023/atac_peaks_by_samples_matrix_neurons_replication.csv")
+
+
+###T cells RNA-seq
+#get combined_mat as in the "diff_expr_analysis_B_and_T_Dec2023.R"
+geo_mat_T_cells_df <- rownames_to_column(combined_mat[, grep("_T_", colnames(combined_mat))], "Ensembl_ID") 
+write_csv(geo_mat_T_cells_df, "GEO/neurons_paper_2023/rna_genes_by_samples_matrix_T_cells.csv")
+
+
+
+

@@ -94,20 +94,29 @@ res2_non_proms <- res2_granges[-queryHits(prom_overlaps2)]
 
 ###supp tables
 res_granges$qvalue <- qvalue(res_granges$pvalue, fdr.level = 0.1)$qvalues
-res2_granges$qvalue <- qvalue(res2_granges$pvalue, fdr.level = 0.1)$qvalues
+res_granges_for_df <- res_granges[which(res_granges$qvalue <= 0.1)]
+res_granges_for_df <- addOverlappingGenes(res_granges_for_df)
+res_granges_for_df <- mergeDuplicates(res_granges_for_df)
 
-res_df <- annoGR2DF(res_granges)
-res2_df <- annoGR2DF(res2_granges)
-res_df <- res_df[which(res_df$qvalue <= 0.1), ]
-res2_df <- res_df[which(res2_df$qvalue <= 0.1), ]
+res2_granges$qvalue <- qvalue(res2_granges$pvalue, fdr.level = 0.1)$qvalues
+res2_granges_for_df <- res2_granges[which(res2_granges$qvalue <= 0.1)]
+res2_granges_for_df <- addOverlappingGenes(res2_granges_for_df)
+res2_granges_for_df <- mergeDuplicates(res2_granges_for_df)
+
+res_df <- annoGR2DF(res_granges_for_df)
+res2_df <- annoGR2DF(res2_granges_for_df)
 res_df$log2FoldChange <- -res_df$log2FoldChange
 res2_df$log2FoldChange <- -res2_df$log2FoldChange
+
+
 write_csv(res_df[order(res_df$qvalue), 
-                 c("chr", "start", "end", "width", "baseMean", "log2FoldChange", "lfcSE", "pvalue", "qvalue")], 
-          "KS1_neurons_atac_most_significant.csv")
+                 c("chr", "start", "end", "width", "baseMean", "log2FoldChange", 
+                   "lfcSE", "pvalue", "qvalue", "gene_id", "gene_name")], 
+          "neuron_mdem_biorxiv_1/supp_tables/SuppTable1_KS1_neurons_atac_most_significant.csv")
 write_csv(res2_df[order(res2_df$qvalue), 
-                  c("chr", "start", "end", "width", "baseMean", "log2FoldChange", "lfcSE", "pvalue", "qvalue")],
-          "KS2_neurons_atac_most_significant.csv")
+                  c("chr", "start", "end", "width", "baseMean", "log2FoldChange", 
+                    "lfcSE", "pvalue", "qvalue", "gene_id", "gene_name")],
+          "neuron_mdem_biorxiv_1/supp_tables/SuppTable2_KS2_neurons_atac_most_significant.csv")
 
 
 

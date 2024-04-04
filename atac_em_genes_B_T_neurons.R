@@ -117,8 +117,9 @@ results_proms$gene_name <- proms_mouse$gene_name[subjectHits(overlaps)]
 gene_level <- split(results_proms, results_proms$gene_name)
 gene_level_em_KS1 <- gene_level[which(toupper(names(gene_level)) %in% rownames(adjmatrix))]
 gene_level_em_KS1 <- endoapply(gene_level_em_KS1, function(xx) unique(xx))
-gene_level_em_KS1_df <- annoGR2DF(unlist(gene_level_em_KS1))
-gene_level_em_KS1_df <- -gene_level_em_KS1_df$log2FoldChange
+gene_level_em_KS1 <- mergeDuplicates(unlist(gene_level_em_KS1))
+gene_level_em_KS1_df <- annoGR2DF(gene_level_em_KS1)
+gene_level_em_KS1_df$log2FoldChange <- -gene_level_em_KS1_df$log2FoldChange
 #
 overlaps <- findOverlaps(res2_granges, proms_mouse)
 results_proms <- res2_granges[queryHits(overlaps)]
@@ -128,13 +129,18 @@ results_proms$gene_name <- proms_mouse$gene_name[subjectHits(overlaps)]
 gene_level <- split(results_proms, results_proms$gene_name)
 gene_level_em_KS2 <- gene_level[which(toupper(names(gene_level)) %in% rownames(adjmatrix))]
 gene_level_em_KS2 <- endoapply(gene_level_em_KS2, function(xx) unique(xx))
-gene_level_em_KS2_df <- annoGR2DF(unlist(gene_level_em_KS2))
-gene_level_em_KS2_df <- -gene_level_em_KS2_df$log2FoldChange
+gene_level_em_KS2 <- mergeDuplicates(unlist(gene_level_em_KS2))
+gene_level_em_KS2_df <- annoGR2DF(gene_level_em_KS2)
+gene_level_em_KS2_df$log2FoldChange <- -gene_level_em_KS2_df$log2FoldChange
 
 ###write the csv files
-write_csv(res_df[order(res_df$qvalue), 
-                 c("chr", "start", "end", "width", "log2FoldChange", "pvalue", "qvalue")], 
-          "KS1_neurons_EM_genes.csv")
+write_csv(gene_level_em_KS1_df[order(gene_level_em_KS1_df$qvalue), 
+                 c("chr", "start", "end", "width", "log2FoldChange", "pvalue", "qvalue", 
+                   "gene_id", "gene_name")], 
+          "neuron_mdem_biorxiv_1/supp_tables/SuppTable3_KS1_neurons_EM_genes.csv")
 
-
+write_csv(gene_level_em_KS2_df[order(gene_level_em_KS2_df$qvalue), 
+                               c("chr", "start", "end", "width", "log2FoldChange", "pvalue", "qvalue", 
+                                 "gene_id", "gene_name")], 
+          "neuron_mdem_biorxiv_1/supp_tables/SuppTable4_KS2_neurons_EM_genes.csv")
 

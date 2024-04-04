@@ -64,6 +64,17 @@ n22 <- length(c(all_genes[-which(all_genes %in% shared_genes | all_genes %in% sh
 fisher.test(matrix(c(n11, n12, n21, n22), nrow = 2))
 
 
+
+###pathway enrichment analysis for shared genes
+library(goseq)
+library(reactome.db)
+library(org.Mm.eg.db)
+library(clusterProfiler)
+reactome_shared_KS1 <- getReactomeEnrichedPathways(shared_genes, all_genes)
+reactome_shared_KS2 <- getReactomeEnrichedPathways(shared_genes2, all_genes2)
+write_csv(reactome_shared_KS1[1:20, ], "neuron_mdem_biorxiv_1/supp_tables/SuppTable15_KS1_shared_3_cell_types_top_pathways.csv")
+write_csv(reactome_shared_KS2[1:20, ], "neuron_mdem_biorxiv_1/supp_tables/SuppTable16_KS2_shared_3_cell_types_top_pathways.csv")
+
 ###figures
 #KS1
 quartz(file = "KS1_T_vs_B_and_neurons.pdf", height = 2.2, width = 2.2, pointsize = 8, type = "pdf")

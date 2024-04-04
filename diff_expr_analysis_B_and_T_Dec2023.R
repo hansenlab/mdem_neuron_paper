@@ -44,7 +44,7 @@ names(files) <- c("100.B.KDM6A_1", "100.B.KDM6A_2", "100.B.KDM6A_3",
 ######
 txdb <- TxDb.Mmusculus.UCSC.mm10.ensGene
 k <- keys(txdb, keytype = "GENEID")
-df <- select(txdb, keys = k, keytype = "GENEID", columns = "TXNAME")
+df <- select(txdb, keys = k, keytype = "GENEID", columns = "TXNAME") #may need to call AnnotationDbi::select()
 tx2gene <- df[, 2:1] 
 
 #get expression matrix
