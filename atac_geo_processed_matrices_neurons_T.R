@@ -41,7 +41,8 @@ write_csv(geo_mat_neurons_replication_df, "GEO/neurons_paper_2023/atac_peaks_by_
 
 ###T cells RNA-seq
 #get combined_mat as in the "diff_expr_analysis_B_and_T_Dec2023.R"
-geo_mat_T_cells_df <- rownames_to_column(combined_mat[, grep("_T_", colnames(combined_mat))], "Ensembl_ID") 
+expr_mat_df <- as.data.frame(combined_mat[, grep("_T_", colnames(combined_mat))])
+geo_mat_T_cells_df <- rownames_to_column(expr_mat_df, "Ensembl_ID") 
 write_csv(geo_mat_T_cells_df, "GEO/neurons_paper_2023/rna_genes_by_samples_matrix_T_cells.csv")
 
 
